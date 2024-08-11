@@ -1,6 +1,7 @@
 import http from 'http';
 import fs from 'fs/promises';
-import path from 'path';
+
+import getPathToFile from './helpers/getPathToFile.js';
 
 function middleware(req, res) {
   if (req.method !== 'GET') {
@@ -17,21 +18,7 @@ function handleUnauthorized(req, res) {
 }
 
 function handleSendData(req, res) {
-  let pathToFile = path.join(import.meta.dirname, 'pages');
-  switch (req.url) {
-    case '/':
-      pathToFile = path.join(pathToFile, 'index.html');
-      break;
-    case '/about':
-      pathToFile = path.join(pathToFile, 'about.html');
-      break;
-    case '/contact-me':
-      pathToFile = path.join(pathToFile, 'contact-me.html');
-      break;
-    default:
-      pathToFile = path.join(pathToFile, '404.html');
-      break;
-  }
+  const pathToFile = getPathToFile(req.url);
 
   fs.readFile(pathToFile)
     .then((data) => {
