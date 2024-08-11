@@ -1,7 +1,8 @@
 import path from 'path';
 
 export default function getPathToFile(url) {
-  let pathToFile = path.join(import.meta.dirname, 'pages');
+  const rootFolder = path.resolve(import.meta.dirname, '..');
+  let pathToFile = path.join(rootFolder, 'pages');
 
   switch (url) {
     case '/':
