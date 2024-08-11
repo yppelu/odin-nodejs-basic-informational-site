@@ -1,0 +1,12 @@
+{
+  "name": "odin-nodejs-basic-informational-site",
+  "version": "1.0.0",
+  "description": "Solution to the TOP's Node path, Node.js course, project Basic Informational Site.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node --watch-path=./ index.js"
+  },
+  "author": "",
+  "license": "MIT"
+}
