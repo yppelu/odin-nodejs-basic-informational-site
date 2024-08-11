@@ -1,7 +1,7 @@
 import http from 'http';
 import fs from 'fs/promises';
 
-import getPathToFile from './helpers/getPathToFile.js';
+import getPathToPageFile from './helpers/getPathToPageFile.js';
 
 function middleware(req, res) {
   if (req.method !== 'GET') {
@@ -18,12 +18,12 @@ function handleUnauthorized(req, res) {
 }
 
 function handleSendData(req, res) {
-  const pathToFile = getPathToFile(req.url);
+  const pathToPageFile = getPathToPageFile(req.url);
 
-  fs.readFile(pathToFile)
+  fs.readFile(pathToPageFile)
     .then((data) => {
       res.setHeader('Content-Type', 'text/html');
-      res.statusCode = (pathToFile.slice(-8) === '404.html') ? 404 : 200;
+      res.statusCode = (pathToPageFile.slice(-8) === '404.html') ? 404 : 200;
       res.end(data);
     })
     .catch((error) => {
