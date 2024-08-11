@@ -1,47 +1,48 @@
 import http from 'http';
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
-const __dirname = import.meta.dirname;
-
-const server = http.createServer((req, res) => {
+function middleware(req, res) {
   if (req.method !== 'GET') {
-    res.writeHead(401, { 'Content-Type': 'text/html' });
-    res.write('<h1>Method not allowed</h1>');
-    res.end();
-  } else if (req.url === '/') {
-    const pathToFile = path.join(__dirname, 'pages', 'index.html');
-    fs.readFile(pathToFile, (error, data) => {
-      if (error) throw error;
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      res.end();
-    });
-  } else if (req.url === '/about') {
-    const pathToFile = path.join(__dirname, 'pages', 'about.html');
-    fs.readFile(pathToFile, (error, data) => {
-      if (error) throw error;
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      res.end();
-    });
-  } else if (req.url === '/contact-me') {
-    const pathToFile = path.join(__dirname, 'pages', 'contact-me.html');
-    fs.readFile(pathToFile, (error, data) => {
-      if (error) throw error;
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.write(data);
-      res.end();
-    });
+    handleUnauthorized(req, res);
   } else {
-    const pathToFile = path.join(__dirname, 'pages', '404.html');
-    fs.readFile(pathToFile, (error, data) => {
-      if (error) throw error;
-      res.writeHead(404, { 'Content-Type': 'text/html' });
-      res.write(data);
-      res.end();
-    });
+    handleSendData(req, res);
   }
-});
+}
 
-server.listen(8080);
+function handleUnauthorized(req, res) {
+  res.writeHead(401, { 'Content-Type': 'text/html' });
+  res.write('<h1>Method not allowed</h1>');
+  res.end();
+}
+
+function handleSendData(req, res) {
+  let pathToFile = path.join(import.meta.dirname, 'pages');
+  switch (req.url) {
+    case '/':
+      pathToFile = path.join(pathToFile, 'index.html');
+      break;
+    case '/about':
+      pathToFile = path.join(pathToFile, 'about.html');
+      break;
+    case '/contact-me':
+      pathToFile = path.join(pathToFile, 'contact-me.html');
+      break;
+    default:
+      pathToFile = path.join(pathToFile, '404.html');
+      break;
+  }
+
+  fs.readFile(pathToFile)
+    .then((data) => {
+      res.setHeader('Content-Type', 'text/html');
+      res.statusCode = (pathToFile.slice(-8) === '404.html') ? 404 : 200;
+      res.end(data);
+    })
+    .catch((error) => {
+      res.writeHead(500, { 'Content-type': 'text/plain' });
+      res.end('Server error');
+    });
+}
+
+http.createServer(middleware).listen(8080);
