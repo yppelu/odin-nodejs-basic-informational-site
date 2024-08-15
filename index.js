@@ -1,35 +1,28 @@
-import http from 'http';
-import fs from 'fs/promises';
+import express from 'express';
 
 import getPathToPageFile from './helpers/getPathToPageFile.js';
 
+const PORT = process.env.PORT || 3000;
+
+const app = express();
+
+app.get(['/', '/home'], middleware);
+
+app.get('/about', middleware);
+
+app.get('/contact-me', middleware);
+
+app.get('*', (req, res) => {
+  res.statusCode = 404;
+  middleware(req, res);
+});
+
+app.listen(PORT);
+
 function middleware(req, res) {
-  if (req.method !== 'GET') {
-    handleUnauthorized(req, res);
-  } else {
-    handleSendData(req, res);
-  }
-}
-
-function handleUnauthorized(req, res) {
-  res.writeHead(401, { 'Content-Type': 'text/html' });
-  res.write('<h1>Method not allowed</h1>');
-  res.end();
-}
-
-function handleSendData(req, res) {
   const pathToPageFile = getPathToPageFile(req.url);
 
-  fs.readFile(pathToPageFile)
-    .then((data) => {
-      res.setHeader('Content-Type', 'text/html');
-      res.statusCode = (pathToPageFile.slice(-8) === '404.html') ? 404 : 200;
-      res.end(data);
-    })
-    .catch((error) => {
-      res.writeHead(500, { 'Content-type': 'text/plain' });
-      res.end('Server error');
-    });
+  res.sendFile(pathToPageFile, (error) => {
+    if (error) res.send('Sorry, an error has occurred.');
+  });
 }
-
-http.createServer(middleware).listen(8080);
