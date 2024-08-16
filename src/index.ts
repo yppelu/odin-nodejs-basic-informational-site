@@ -9,6 +9,10 @@ const PORT = 3000;
 const app = express();
 
 app.use('^/$|/index(.html)?', indexRouter);
+app.get(['/homepage', '/home'], (req, res) => {
+  res.status(301).redirect('/');
+});
+
 app.use('/about(.html)?', aboutRouter);
 app.use('/contact-me(.html)?', contactMeRouter);
 app.use('*', pageNotFoundErrorRouter);

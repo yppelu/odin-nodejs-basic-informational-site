@@ -12,6 +12,9 @@ const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
 const PORT = 3000;
 const app = (0, express_1.default)();
 app.use('^/$|/index(.html)?', indexRouter_1.default);
+app.get(['/homepage', '/home'], (req, res) => {
+    res.status(301).redirect('/');
+});
 app.use('/about(.html)?', aboutRouter_1.default);
 app.use('/contact-me(.html)?', contactMeRouter_1.default);
 app.use('*', pageNotFoundRouter_1.default);
