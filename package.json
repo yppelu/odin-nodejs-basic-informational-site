@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "description": "Solution to the TOP's Node path, Node.js course, project Basic Informational Site.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
-    "start": "node --watch-path=./ index.js"
+    "build": "tsc --build",
+    "start:prod": "node ./dist/index.js",
+    "start:dev": "nodemon ./src/index.ts"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   }
 }
