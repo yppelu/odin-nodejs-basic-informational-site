@@ -4,13 +4,15 @@
   "description": "Solution to the TOP's Node path, Node.js course, project Basic Informational Site.",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build",
+    "prebuild": "rm -rf ./dist/views ./dist/public",
+    "build": "tsc --build && cp -r ./src/views ./dist/views && cp -r ./src/public ./dist/public",
     "start:prod": "node ./dist/index.js",
     "start:dev": "nodemon ./src/index.ts"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "ejs": "^3.1.10",
     "express": "^4.19.2"
   },
   "devDependencies": {
