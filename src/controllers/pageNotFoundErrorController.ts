@@ -1,5 +1,5 @@
 import { Request, Response } from "express-serve-static-core";
 
 export function getPageNotFoundErrorPage(req: Request, res: Response) {
-  res.render('./404.ejs');
+  res.render('./pages/404', { title: '404 | Not Found' });
 }

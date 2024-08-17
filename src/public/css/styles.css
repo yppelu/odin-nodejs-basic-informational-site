@@ -7,13 +7,24 @@
 body {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 1rem;
 
   min-height: 100vh;
   padding: 1rem;
 }
 
+.not-found__title {
+  align-self: center;
+}
+
+.not-found__image {
+  align-self: center;
+  max-height: 75vh;
+}
+
 .footer {
   display: flex;
   justify-content: center;
+
+  margin-top: auto;
 }
